@@ -328,3 +328,33 @@ Nenhuma. Todas as 20 regras do PRD e a restrição do cron possuem pelo menos um
 ### Resultado da suíte
 
 O comando `mvn test` executou 105 testes, com 105 falhas, 0 erros e 0 testes ignorados. Todas as falhas ocorreram porque `BibliotecaService.avaliar` ainda retorna `null`; nenhuma regra de negócio foi implementada.
+
+## Atualização da fase green
+
+O comando `./mvnw -B verify` foi executado após a implementação mínima. Resultado: 105 testes, 0 falhas, 0 erros e 0 testes ignorados.
+
+| Regra | Caso para teste | Status atual |
+|---|---|---|
+| RF-01 | 5 casos em `RF01_criarConta` | GREEN, 5 aprovados |
+| RF-02 | 5 casos em `RF02_atualizarPerfil` | GREEN, 5 aprovados |
+| RF-03 | 5 casos em `RF03_realizarLogin` | GREEN, 5 aprovados |
+| RF-04 | 5 casos em `RF04_emitirToken` | GREEN, 5 aprovados |
+| RF-05 | 5 casos em `RF05_encerrarSessao` | GREEN, 5 aprovados |
+| RF-06 | 5 casos em `RF06_consultarPlano` | GREEN, 5 aprovados |
+| RF-07 | 5 casos em `RF07_acessarLivrosExclusivos` | GREEN, 5 aprovados |
+| RF-08 | 5 casos em `RF08_solicitarLivroPublico` | GREEN, 5 aprovados |
+| RF-09 | 5 casos em `RF09_solicitarLivrosAssinante` | GREEN, 5 aprovados |
+| RF-10 | 5 casos em `RF10_cadastrarLivro` | GREEN, 5 aprovados |
+| RF-11 | 5 casos em `RF11_classificarLivro` | GREEN, 5 aprovados |
+| RF-12 | 5 casos em `RF12_acompanharEmprestimos` | GREEN, 5 aprovados |
+| RNF-01 | 5 casos em `RNF01_tempoPerfilAcervo` | GREEN, 5 aprovados |
+| RNF-02 | 5 casos em `RNF02_tempoLoginLogout` | GREEN, 5 aprovados |
+| RNF-03 | 5 casos em `RNF03_expiracaoToken` | GREEN, 5 aprovados |
+| RNF-04 | 5 casos em `RNF04_usuariosSimultaneos` | GREEN, 5 aprovados |
+| RNF-05 | 5 casos em `RNF05_disponibilidadeMensal` | GREEN, 5 aprovados |
+| RNF-06 | 5 casos em `RNF06_bloqueioLivroExclusivo` | GREEN, 5 aprovados |
+| RNF-07 | 5 casos em `RNF07_tempoConsultaPublica` | GREEN, 5 aprovados |
+| RNF-08 | 5 casos em `RNF08_auditoriaClassificacao` | GREEN, 5 aprovados |
+| Restrição do cron | 5 casos em `CRON_restricaoDadosNovos` | GREEN, 5 aprovados |
+
+Nenhuma regra permanece sem teste ou sem aprovação na suíte atual.
