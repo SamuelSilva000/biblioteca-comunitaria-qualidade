@@ -117,3 +117,23 @@ biblioteca-comunitaria-qualidade/
 ```
 
 A estrutura poderá ser ajustada conforme a implementação dos módulos de conta, sessão, assinatura e acervo.
+
+## Integração Contínua
+
+Workflow em .github/workflows/ci.yml
+
+Comando local e na CI: ./mvnw -B verify
+
+Java 21, distribution temurin
+
+Relatórios publicados como artifact com if: always()
+
+### Execuções registradas
+
+| ID | Status | Evento | Branch | Descrição |
+|---|---|---|---|---|
+| 35501295460 | success | pull_request | ci-workflow | Primeira execução verde do workflow |
+| 35501669225 | failure | pull_request | ci-workflow | Run vermelho intencional, asserção quebrada de propósito |
+| 35501781320 | success | pull_request | ci-workflow | Verde após reverter a quebra |
+| 35501853795 | success | push | main | Verde após o merge do pull request 1 |
+| 35502056127 | success | push | main | Verde após o commit do ciclo 01 de avaliação arquitetural |
