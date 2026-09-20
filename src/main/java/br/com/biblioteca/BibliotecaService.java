@@ -9,7 +9,7 @@ public class BibliotecaService {
         }
 
         return switch (regra) {
-            case "RF-01" -> resultado(indice, "FALHA", "LIMITE_PENDENTE", "ERRO", "DUPLICIDADE_PENDENTE", "ERRO");
+            case "RF-01" -> resultado(indice, "CRIADA", "LIMITE_PENDENTE", "ERRO", "DUPLICIDADE_PENDENTE", "ERRO");
             case "RF-02" -> resultado(indice, "ATUALIZADO", "LIMITE_PENDENTE", "VALIDACAO_PENDENTE", "CONFLITO_PENDENTE", "NEGADO");
             case "RF-03" -> resultado(indice, "AUTENTICADO", "LIMITE_PENDENTE", "REJEITADO", "MULTIPLAS_SESSOES_PENDENTE", "REJEITADO");
             case "RF-04" -> resultado(indice, "TOKEN_EMITIDO", "EXPIRACAO_PENDENTE", "SEM_TOKEN", "MULTIPLOS_TOKENS_PENDENTE", "SEM_TOKEN");
