@@ -41,3 +41,12 @@ jobs:
             target/failsafe-reports/
           if-no-files-found: ignore
           retention-days: 7
+
+      - name: Publicar relatório JaCoCo
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: relatorio-jacoco
+          path: target/site/jacoco/
+          if-no-files-found: ignore
+          retention-days: 7

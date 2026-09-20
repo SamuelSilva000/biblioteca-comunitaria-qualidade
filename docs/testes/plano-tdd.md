@@ -358,3 +358,31 @@ O comando `./mvnw -B verify` foi executado após a implementação mínima. Resu
 | Restrição do cron | 5 casos em `CRON_restricaoDadosNovos` | GREEN, 5 aprovados |
 
 Nenhuma regra permanece sem teste ou sem aprovação na suíte atual.
+
+## Cobertura JaCoCo
+
+O plugin `jacoco-maven-plugin` versão 0.8.15 foi configurado no `pom.xml` para gerar relatórios HTML e XML na fase `verify` e validar o elemento `BUNDLE` com mínimo de 80% de linhas e 70% de branches.
+
+### Resultado por classe
+
+| Classe | Linhas cobertas | Branches cobertos | Linhas não cobertas | Branches não cobertos |
+|---|---:|---:|---:|---:|
+| `br.com.biblioteca.BibliotecaService` | 42 de 47, 89% | 37 de 42, 89% | 8, 33, 39, 56 e 67 | Caminhos de entrada inválida, regra desconhecida e índice desconhecido |
+
+### Lacunas de cobertura
+
+| Linha ou branch | Comportamento | Classificação | Decisão |
+|---|---|---|---|
+| Linha 8 e branch da condição na linha 7 | Retornar `null` quando a categoria do caso não é reconhecida. | Cosmética ou fora do contrato | Não criar teste: o plano não define retorno para categoria desconhecida. |
+| Linha 33 e branch padrão do `switch` da linha 11 | Retornar `null` quando a regra não é reconhecida. | Cosmética ou fora do contrato | Não criar teste: RF e RNF válidos estão cobertos e regra desconhecida não é requisito. |
+| Linha 39 e branch da condição na linha 38 | Tratar argumento `caso` nulo. | Cosmética ou fora do contrato | Não criar teste: nenhum RF ou RNF define entrada nula para o adaptador textual. |
+| Linha 56 e branch da condição na linha 53 | Retornar índice inválido para texto de caso desconhecido. | Cosmética ou fora do contrato | Não criar teste: as cinco categorias do plano estão cobertas. |
+| Linha 67 e branch padrão do `switch` da linha 61 | Tratar índice fora do intervalo conhecido. | Cosmética ou fora do contrato | Não criar teste: o índice só é produzido pelas cinco categorias cobertas. |
+
+Não foram identificadas lacunas de risco nas regras de negócio cobertas pelo contrato atual. Por isso, nenhum teste adicional foi escrito apenas para aumentar o percentual de cobertura e nenhum comportamento de produção foi alterado.
+
+### Experimento da meta
+
+1. Com a meta temporária de 100% de linhas, `./mvnw -B verify` falhou porque a cobertura observada foi 89%.
+2. Com a meta restaurada para 80% de linhas e 70% de branches, `./mvnw -B verify` passou com 105 testes, 0 falhas, 0 erros e 0 ignorados.
+3. O relatório HTML foi gerado em `target/site/jacoco/index.html` e o relatório XML em `target/site/jacoco/jacoco.xml`.
