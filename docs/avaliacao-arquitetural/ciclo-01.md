@@ -39,7 +39,7 @@ Os cenários abaixo são derivados dos requisitos existentes e da restrição do
 | Artefato | API REST, sessão, plano e acervo. |
 | Ambiente | Fluxo online com livro exclusivo disponível. |
 | Resposta | Negar o acesso e não retornar dados do livro. |
-| Medida de resposta | 100% das tentativas, conforme RNF-06 em [prd.md](../prd.md#L37). |
+| Medida de resposta | 100% das tentativas, conforme RNF-06 em [prd.md](../prd.md#L37). A análise SonarCloud concluiu com Quality Gate Passed, Security rating A e 0 issues. |
 
 ### C-02, tempo do fluxo online
 
@@ -50,7 +50,7 @@ Os cenários abaixo são derivados dos requisitos existentes e da restrição do
 | Artefato | API REST, sessão, assinatura e acervo. |
 | Ambiente | Uso normal da API, inclusive durante o cron, quando houver execução concorrente. |
 | Resposta | Atender a consulta sem ultrapassar a meta aplicável. |
-| Medida de resposta | 95% em até 500 milissegundos para perfil e acervo, conforme RNF-01 em [prd.md](../prd.md#L19), e 95% em até 1 segundo para consulta pública, conforme RNF-07 em [prd.md](../prd.md#L37). A diferença entre metas permanece conflito documental. |
+| Medida de resposta | 95% em até 500 milissegundos para perfil e acervo, conforme RNF-01 em [prd.md](../prd.md#L19), e 95% em até 1 segundo para consulta pública, conforme RNF-07 em [prd.md](../prd.md#L37). A análise SonarCloud registrou cobertura de 88.8 por cento, mas não mede tempo de resposta. A diferença entre metas permanece conflito documental. |
 
 ### C-03, processamento incremental
 
@@ -72,7 +72,7 @@ Os cenários abaixo são derivados dos requisitos existentes e da restrição do
 | Artefato | Batch, indicadores, checkpoint e observabilidade. |
 | Ambiente | Execução diária interrompida. |
 | Resposta | Reexecutar sem perder dados nem duplicar indicadores, mantendo a posição anterior até o sucesso. |
-| Medida de resposta | Recuperação em até 15 minutos é cenário da utility tree em [utility-tree.md](../utility-tree.md#L9). Zero perda e zero duplicação são hipóteses, não requisitos. |
+| Medida de resposta | Recuperação em até 15 minutos é cenário da utility tree em [utility-tree.md](../utility-tree.md#L9). Zero perda e zero duplicação são hipóteses, não requisitos. O Quality Gate SonarCloud foi Passed, sem issues abertas, mas não avalia esse fluxo batch inexistente. |
 
 ### C-05, auditoria de classificação
 
@@ -83,7 +83,7 @@ Os cenários abaixo são derivados dos requisitos existentes e da restrição do
 | Artefato | Acervo e registro de auditoria. |
 | Ambiente | Operação normal, inclusive alterações concorrentes. |
 | Resposta | Salvar a classificação e registrar a alteração. |
-| Medida de resposta | 100% das alterações registradas, conforme RNF-08 em [prd.md](../prd.md#L38). Campos do registro não foram definidos. |
+| Medida de resposta | 100% das alterações registradas, conforme RNF-08 em [prd.md](../prd.md#L38). Campos do registro não foram definidos. O SonarCloud registrou Maintainability rating A, com 0 issues, para as 143 linhas analisadas. |
 
 ### C-06, proteção de dados dos leitores
 
@@ -94,7 +94,7 @@ Os cenários abaixo são derivados dos requisitos existentes e da restrição do
 | Artefato | Dados operacionais, batch e indicadores. |
 | Ambiente | Execução batch ou consulta operacional. |
 | Resposta | Bloquear acesso não autorizado e usar somente dados necessários aos indicadores. |
-| Medida de resposta | Não há medida de LGPD no PRD. Bloqueio de 100% é hipótese de avaliação, não requisito. |
+| Medida de resposta | Não há medida de LGPD no PRD. Bloqueio de 100% é hipótese de avaliação, não requisito. O SonarCloud registrou Security rating A, 0 issues e 0 security hotspots, sem substituir controles de LGPD. |
 
 ## 3. Utility tree priorizada
 
@@ -216,23 +216,23 @@ O relatório JaCoCo local foi gerado em `target/site/jacoco/index.html` e `targe
 
 ### SonarCloud
 
-O workflow iniciou a análise do projeto `SamuelSilva000_biblioteca-comunitaria-qualidade` no run `35504078968`, mas o scanner falhou antes de publicar análise e Quality Gate. A mensagem registrada foi: `You are running CI analysis while Automatic Analysis is enabled.` O run anterior `35503908344` falhou porque o prefixo Maven `sonar` ainda não estava declarado; isso foi corrigido no commit `8ab1af8`.
+A análise do SonarCloud foi concluída com sucesso no pull request 2, que foi mergeado na `main`. O Quality Gate foi `Passed`. A análise registrou cobertura de 88.8 por cento, 143 linhas de código, duplicação de 0.0 por cento, Security rating A com 0 issues, Reliability rating A com 0 issues, Maintainability rating A com 0 issues, 0 security hotspots e 0 issues abertas.
 
-O Quality Gate do novo código não pôde ser lido: a consulta pública retornou status `NONE`, sem condições. A causa é uma configuração externa do projeto SonarCloud. É necessário desativar Automatic Analysis no projeto SonarCloud antes de executar a análise CI. O workflow foi preparado para aguardar o resultado com `-Dsonar.qualitygate.wait=true`, mas ainda não há resultado válido, issues ou evidência para aceitar como falso positivo.
+Esses dados são evidência de análise estática e cobertura reportada pelo SonarCloud para o código analisado. Eles não comprovam os comportamentos de conta, sessão, assinatura, acervo ou cron que ainda não existem no código.
 
 ### Revisão dos cenários, riscos e sensibilidade
 
 | Item | Evidência atual | Revisão |
 |---|---|---|
-| C-01, proteção do acervo exclusivo | JaCoCo cobre apenas retornos textuais e o SonarCloud ainda não analisou o projeto. | O risco de autorização real permanece alto. A cobertura atual não demonstra RNF-06. |
-| C-02, tempo do fluxo online | Não há endpoint ou medição de tempo no código; SonarCloud não publicou análise. | O risco de performance permanece sem evidência. JaCoCo não substitui teste de desempenho. |
-| C-03 e C-04, cron incremental e recuperação | Não há cron, checkpoint, retry ou persistência no código. | Os riscos de perda, duplicação e dados atrasados permanecem sem mitigação implementada. |
-| C-05, auditoria | O relatório cobre o retorno `AUDITADO`, mas não existe registro de auditoria real. | O risco de rastreabilidade permanece. A cobertura é cosmética para este cenário. |
-| C-06, dados pessoais | Não há dados pessoais nem controles de acesso no código; Quality Gate indisponível. | O risco de LGPD permanece aberto e não há issue SonarCloud para aceitar ou corrigir. |
+| C-01, proteção do acervo exclusivo | Quality Gate Passed, Security rating A, 0 issues e 0 security hotspots. | O risco de vulnerabilidades estáticas no código analisado é baixo, mas o risco de autorização real permanece alto porque não há plano, token ou acervo implementados. |
+| C-02, tempo do fluxo online | Cobertura SonarCloud de 88.8 por cento e 143 linhas analisadas. | A qualidade estática passou, mas não há endpoint nem medição de tempo. O risco de performance permanece sem evidência dinâmica. |
+| C-03 e C-04, cron incremental e recuperação | Quality Gate Passed e Reliability rating A, com 0 issues. | Não há cron, checkpoint, retry ou persistência no código. Os riscos de perda, duplicação e dados atrasados permanecem sem mitigação funcional. |
+| C-05, auditoria | Maintainability rating A, 0 issues e duplicação de 0.0 por cento. | A análise estática não encontrou problemas de manutenção no código analisado, mas não existe registro de auditoria real. |
+| C-06, dados pessoais | Security rating A, 0 issues e 0 security hotspots. | Não foram apontados problemas estáticos, mas não há dados pessoais nem controles de acesso implementados. O risco de LGPD permanece aberto. |
 
-O principal ponto de sensibilidade continua sendo a diferença entre o contrato textual testado e o comportamento arquitetural prometido. A medição JaCoCo mostra que os caminhos defensivos não cobertos não são o maior risco; o maior risco é a ausência dos componentes reais. O SonarCloud ainda não acrescentou uma medida de qualidade por causa da configuração de Automatic Analysis.
+O principal ponto de sensibilidade continua sendo a diferença entre o contrato textual testado e o comportamento arquitetural prometido. A cobertura de 88.8 por cento e o Quality Gate Passed melhoram a evidência sobre o código existente, mas não medem os componentes arquiteturais ausentes.
 
-O workflow de CI e a meta JaCoCo são não riscos operacionais deste ciclo: o build local passou com 105 testes e as metas de cobertura, e a falha do SonarCloud foi identificada como configuração externa. Isso não transforma a ausência de análise SonarCloud em não risco.
+O workflow de CI, a meta JaCoCo e a análise estática SonarCloud são não riscos operacionais deste ciclo: o Quality Gate foi Passed, a cobertura medida foi 88.8 por cento, a duplicação foi 0.0 por cento e as três ratings de qualidade foram A com 0 issues. Isso não transforma a ausência dos componentes de negócio em não risco.
 
 ### Ações priorizadas do ciclo
 
@@ -247,6 +247,8 @@ O workflow de CI e a meta JaCoCo são não riscos operacionais deste ciclo: o bu
 | Definir controles LGPD | Não atendida | Não há dados pessoais ou controles implementados. |
 | Medir impacto e custo do batch | Não atendida | Não há batch executável. |
 | Substituir o contrato artificial por testes de componentes reais | Não atendida | Há 105 testes, mas todos chamam o tradutor textual. |
-| Manter CI e publicar relatórios | Parcialmente atendida | CI e JaCoCo estão configurados; SonarCloud ainda não concluiu e o Quality Gate está indisponível. |
+| Configurar JaCoCo com metas de cobertura e publicar relatório | Atendida | JaCoCo mediu 88.8 por cento de cobertura; o Quality Gate do Maven passou com as metas configuradas. |
+| Integrar SonarCloud e obter Quality Gate | Atendida | Quality Gate Passed, cobertura de 88.8 por cento, 143 linhas, duplicação de 0.0 por cento, ratings A e 0 issues. |
+| Manter CI e publicar relatórios | Parcialmente atendida | CI, JaCoCo e SonarCloud estão configurados; os comportamentos de negócio e batch continuam sem implementação. |
 
-O próximo bloqueio objetivo é desativar Automatic Analysis no projeto SonarCloud. Depois disso, deve-se executar novamente o workflow, ler o Quality Gate do novo código, listar cada issue com sua decisão fundamentada e atualizar esta seção com o resultado real.
+As ações de cobertura e análise estática foram atendidas. Permanecem prioritárias as ações de modelo de domínio, autorização real, cron incremental, recuperação batch, LGPD operacional, desempenho e testes de comportamento real.
