@@ -89,6 +89,15 @@ Para executar os testes:
 ./mvnw test
 ```
 
+## Integração contínua
+
+O workflow executa `./mvnw -B verify` em pull requests e em pushes na branch `main`.
+
+Runs confirmados:
+
+1. Run `35501295460`: https://github.com/SamuelSilva000/biblioteca-comunitaria-qualidade/actions/runs/35501295460
+2. Job `verify` `106053402484`: https://github.com/SamuelSilva000/biblioteca-comunitaria-qualidade/actions/runs/35501295460/job/106053402484
+
 ## Estrutura de pastas prevista
 
 ```text
