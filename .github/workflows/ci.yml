@@ -36,7 +36,7 @@ jobs:
       - name: Executar análise SonarCloud
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./mvnw -B sonar:sonar
+        run: ./mvnw -B sonar:sonar -Dsonar.qualitygate.wait=true
 
       - name: Publicar relatórios Surefire e Failsafe
         if: always()

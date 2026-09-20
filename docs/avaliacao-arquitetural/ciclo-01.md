@@ -207,3 +207,46 @@ A única tática de teste observada é o teste parametrizado, com cinco categori
 O maior achado ATAM é a divergência entre a arquitetura documentada e o sistema implementado. A documentação descreve API, segurança, acervo, cron incremental e controles de dados; o código atual somente traduz nomes de casos em strings.
 
 O CI está operacional e os testes estão verdes, mas isso valida apenas o contrato artificial de `BibliotecaService.avaliar`. O próximo ciclo deve priorizar o modelo de domínio, a autorização real e a definição do processamento incremental antes de considerar os atributos de qualidade arquiteturalmente demonstrados.
+
+## Evidências de qualidade e atualização do ciclo
+
+### JaCoCo
+
+O relatório JaCoCo local foi gerado em `target/site/jacoco/index.html` e `target/site/jacoco/jacoco.xml`. A classe `BibliotecaService` apresentou 42 de 47 linhas cobertas, 89%, e 37 de 42 branches cobertos, 89%. As metas configuradas são 80% de linhas e 70% de branches no `BUNDLE`, portanto o build Maven passou. Essa evidência confirma cobertura do adaptador textual, não dos componentes de conta, sessão, assinatura, acervo ou cron descritos na arquitetura.
+
+### SonarCloud
+
+O workflow iniciou a análise do projeto `SamuelSilva000_biblioteca-comunitaria-qualidade` no run `35504078968`, mas o scanner falhou antes de publicar análise e Quality Gate. A mensagem registrada foi: `You are running CI analysis while Automatic Analysis is enabled.` O run anterior `35503908344` falhou porque o prefixo Maven `sonar` ainda não estava declarado; isso foi corrigido no commit `8ab1af8`.
+
+O Quality Gate do novo código não pôde ser lido: a consulta pública retornou status `NONE`, sem condições. A causa é uma configuração externa do projeto SonarCloud. É necessário desativar Automatic Analysis no projeto SonarCloud antes de executar a análise CI. O workflow foi preparado para aguardar o resultado com `-Dsonar.qualitygate.wait=true`, mas ainda não há resultado válido, issues ou evidência para aceitar como falso positivo.
+
+### Revisão dos cenários, riscos e sensibilidade
+
+| Item | Evidência atual | Revisão |
+|---|---|---|
+| C-01, proteção do acervo exclusivo | JaCoCo cobre apenas retornos textuais e o SonarCloud ainda não analisou o projeto. | O risco de autorização real permanece alto. A cobertura atual não demonstra RNF-06. |
+| C-02, tempo do fluxo online | Não há endpoint ou medição de tempo no código; SonarCloud não publicou análise. | O risco de performance permanece sem evidência. JaCoCo não substitui teste de desempenho. |
+| C-03 e C-04, cron incremental e recuperação | Não há cron, checkpoint, retry ou persistência no código. | Os riscos de perda, duplicação e dados atrasados permanecem sem mitigação implementada. |
+| C-05, auditoria | O relatório cobre o retorno `AUDITADO`, mas não existe registro de auditoria real. | O risco de rastreabilidade permanece. A cobertura é cosmética para este cenário. |
+| C-06, dados pessoais | Não há dados pessoais nem controles de acesso no código; Quality Gate indisponível. | O risco de LGPD permanece aberto e não há issue SonarCloud para aceitar ou corrigir. |
+
+O principal ponto de sensibilidade continua sendo a diferença entre o contrato textual testado e o comportamento arquitetural prometido. A medição JaCoCo mostra que os caminhos defensivos não cobertos não são o maior risco; o maior risco é a ausência dos componentes reais. O SonarCloud ainda não acrescentou uma medida de qualidade por causa da configuração de Automatic Analysis.
+
+O workflow de CI e a meta JaCoCo são não riscos operacionais deste ciclo: o build local passou com 105 testes e as metas de cobertura, e a falha do SonarCloud foi identificada como configuração externa. Isso não transforma a ausência de análise SonarCloud em não risco.
+
+### Ações priorizadas do ciclo
+
+| Ação | Status no ciclo 01 | Evidência |
+|---|---|---|
+| Definir e testar o modelo de conta, sessão, plano, livro e empréstimo | Não atendida | O código ainda possui somente `BibliotecaService.avaliar`. |
+| Resolver metas e medição de desempenho, concorrência e disponibilidade | Não atendida | Não há endpoints nem testes de carga. |
+| Implementar autorização real por plano | Não atendida | RNF-06 está representado apenas por strings de resultado. |
+| Definir watermark e dados atrasados ou corrigidos | Não atendida | Não existe cron ou fonte operacional. |
+| Implementar transação, idempotência, lock e retry | Não atendida | Não há persistência ou processamento batch. |
+| Definir gates, indicadores, registry, promoção e rollback | Não atendida | São apenas decisões documentadas. |
+| Definir controles LGPD | Não atendida | Não há dados pessoais ou controles implementados. |
+| Medir impacto e custo do batch | Não atendida | Não há batch executável. |
+| Substituir o contrato artificial por testes de componentes reais | Não atendida | Há 105 testes, mas todos chamam o tradutor textual. |
+| Manter CI e publicar relatórios | Parcialmente atendida | CI e JaCoCo estão configurados; SonarCloud ainda não concluiu e o Quality Gate está indisponível. |
+
+O próximo bloqueio objetivo é desativar Automatic Analysis no projeto SonarCloud. Depois disso, deve-se executar novamente o workflow, ler o Quality Gate do novo código, listar cada issue com sua decisão fundamentada e atualizar esta seção com o resultado real.
