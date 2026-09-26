@@ -49,4 +49,28 @@ class AssinaturaTest {
 
         assertEquals(false, assinatura.podeAcessarExclusivo(RELOGIO));
     }
+
+    @Test
+    void premiumVencimentoUmSegundoDepoisDoAgoraConcedeAcesso() {
+        Clock relogio = Clock.fixed(Instant.parse("2026-10-05T12:00:00Z"), ZoneOffset.UTC);
+        Assinatura assinatura = new Assinatura(Plano.PREMIUM, Instant.parse("2026-10-05T12:00:01Z"), false);
+
+        assertEquals(true, assinatura.podeAcessarExclusivo(relogio));
+    }
+
+    @Test
+    void premiumVencimentoUmSegundoAntesDoAgoraNaoConcedeAcesso() {
+        Clock relogio = Clock.fixed(Instant.parse("2026-10-05T12:00:00Z"), ZoneOffset.UTC);
+        Assinatura assinatura = new Assinatura(Plano.PREMIUM, Instant.parse("2026-10-05T11:59:59Z"), false);
+
+        assertEquals(false, assinatura.podeAcessarExclusivo(relogio));
+    }
+
+    @Test
+    void planoPremiumSemVencimentoNaoConcedeAcesso() {
+        Clock relogio = Clock.fixed(Instant.parse("2026-10-05T12:00:00Z"), ZoneOffset.UTC);
+        Assinatura assinatura = new Assinatura(Plano.PREMIUM, null, false);
+
+        assertEquals(false, assinatura.podeAcessarExclusivo(relogio));
+    }
 }

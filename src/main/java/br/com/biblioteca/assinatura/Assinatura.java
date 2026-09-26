@@ -21,6 +21,10 @@ public class Assinatura {
     }
 
     public boolean podeAcessarExclusivo(Clock relogio) {
-        throw new UnsupportedOperationException("regra ainda nao implementada");
+        if (plano != Plano.PREMIUM || cancelada || vencimento == null) {
+            return false;
+        }
+
+        return relogio.instant().isBefore(vencimento);
     }
 }
