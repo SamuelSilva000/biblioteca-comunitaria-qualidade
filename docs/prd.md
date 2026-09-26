@@ -16,6 +16,7 @@
 | RF-10 | Permitir ao bibliotecário cadastrar livros no acervo. | RF | E4 | O sistema deve criar o livro quando o bibliotecário informar os dados obrigatórios. |
 | RF-11 | Permitir ao bibliotecário definir se um livro é público ou exclusivo para assinantes. | RF | E4 | O sistema deve salvar a classificação escolhida e aplicar a regra de acesso correspondente. |
 | RF-12 | Permitir ao bibliotecário acompanhar os empréstimos. | RF | E4 | O bibliotecário deve consultar os empréstimos com leitor, livro, data de início e situação. |
+| RF-13 | Permitir que uma assinatura premium conceda acesso a livros exclusivos enquanto estiver vigente. | RF | E3 | Uma assinatura PREMIUM nao cancelada concede acesso exclusivo quando o instante atual e estritamente anterior ao vencimento. Em qualquer outro caso o acesso deve ser negado. |
 | RNF-01 | Responder às consultas de perfil e acervo em até 500 milissegundos em pelo menos 95% das solicitações. | RNF | E1 | 500 milissegundos e 95%. |
 | RNF-02 | Responder às operações de login e logout em até 800 milissegundos em pelo menos 95% das solicitações. | RNF | E2 | 800 milissegundos e 95%. |
 | RNF-03 | Expirar o token de sessão após 30 minutos sem renovação. | RNF | E2 | 30 minutos. |
