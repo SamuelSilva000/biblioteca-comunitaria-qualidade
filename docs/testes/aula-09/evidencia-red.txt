@@ -1,0 +1,14 @@
+# Evidencia RED do ciclo 1
+
+Comando: ./mvnw -B verify
+Resultado: cinco testes falharam por UnsupportedOperationException.
+Trecho da saida:
+
+[ERROR] Errors:
+[ERROR]   AssinaturaTest.assinaturaCanceladaNaoConcedeAcesso:50 » UnsupportedOperation regra ainda nao implementada
+[ERROR]   AssinaturaTest.instanteExatoDoVencimentoNaoConcedeAcesso:36 » UnsupportedOperation regra ainda nao implementada
+[ERROR]   AssinaturaTest.planoGratuitoNaoConcedeAcesso:43 » UnsupportedOperation regra ainda nao implementada
+[ERROR]   AssinaturaTest.premiumVencidaNaoConcedeAcesso:29 » UnsupportedOperation regra ainda nao implementada
+[ERROR]   AssinaturaTest.premiumVigenteConcedeAcessoExclusivo:22 » UnsupportedOperation regra ainda nao implementada
+[ERROR] Tests run: 116, Failures: 0, Errors: 5, Skipped: 0
+[INFO] BUILD FAILURE
