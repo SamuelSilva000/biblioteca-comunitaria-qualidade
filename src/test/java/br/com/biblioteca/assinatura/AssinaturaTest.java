@@ -12,8 +12,8 @@ import br.com.biblioteca.assinatura.Assinatura.Plano;
 
 class AssinaturaTest {
 
-    private static final Instant AGORA = Instant.parse("2026-10-05T12:00:00Z");
-    private static final Clock RELOGIO = Clock.fixed(AGORA, ZoneOffset.UTC);
+    private static final String INSTANTE_REFERENCIA = "2026-10-05T12:00:00Z";
+    private static final Clock RELOGIO = relogioEm(INSTANTE_REFERENCIA);
 
     @Test
     void premiumVigenteConcedeAcessoExclusivo() {
@@ -31,7 +31,7 @@ class AssinaturaTest {
 
     @Test
     void instanteExatoDoVencimentoNaoConcedeAcesso() {
-        Assinatura assinatura = new Assinatura(Plano.PREMIUM, AGORA, false);
+        Assinatura assinatura = new Assinatura(Plano.PREMIUM, Instant.parse(INSTANTE_REFERENCIA), false);
 
         assertEquals(false, assinatura.podeAcessarExclusivo(RELOGIO));
     }
@@ -52,7 +52,7 @@ class AssinaturaTest {
 
     @Test
     void premiumVencimentoUmSegundoDepoisDoAgoraConcedeAcesso() {
-        Clock relogio = Clock.fixed(Instant.parse("2026-10-05T12:00:00Z"), ZoneOffset.UTC);
+        Clock relogio = relogioEm(INSTANTE_REFERENCIA);
         Assinatura assinatura = new Assinatura(Plano.PREMIUM, Instant.parse("2026-10-05T12:00:01Z"), false);
 
         assertEquals(true, assinatura.podeAcessarExclusivo(relogio));
@@ -60,7 +60,7 @@ class AssinaturaTest {
 
     @Test
     void premiumVencimentoUmSegundoAntesDoAgoraNaoConcedeAcesso() {
-        Clock relogio = Clock.fixed(Instant.parse("2026-10-05T12:00:00Z"), ZoneOffset.UTC);
+        Clock relogio = relogioEm(INSTANTE_REFERENCIA);
         Assinatura assinatura = new Assinatura(Plano.PREMIUM, Instant.parse("2026-10-05T11:59:59Z"), false);
 
         assertEquals(false, assinatura.podeAcessarExclusivo(relogio));
@@ -68,9 +68,13 @@ class AssinaturaTest {
 
     @Test
     void planoPremiumSemVencimentoNaoConcedeAcesso() {
-        Clock relogio = Clock.fixed(Instant.parse("2026-10-05T12:00:00Z"), ZoneOffset.UTC);
+        Clock relogio = relogioEm(INSTANTE_REFERENCIA);
         Assinatura assinatura = new Assinatura(Plano.PREMIUM, null, false);
 
         assertEquals(false, assinatura.podeAcessarExclusivo(relogio));
+    }
+
+    private static Clock relogioEm(String instanteIso) {
+        return Clock.fixed(Instant.parse(instanteIso), ZoneOffset.UTC);
     }
 }

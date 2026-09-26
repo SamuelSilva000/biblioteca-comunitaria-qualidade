@@ -670,6 +670,7 @@ Os ADRs seguintes são propostas para avaliação. Não são decisões implement
 | RF-10 | Cadastro de livro | Acervo e empréstimos | RF-10; seção 8 |
 | RF-11 | Classificação de livro e auditoria | Acervo, auditoria e observabilidade | RF-11 e RNF-08; seção 11 |
 | RF-12 | Consulta de empréstimos | Acervo e empréstimos | RF-12; seção 9 |
+| RF-13 | Vigencia da assinatura com Clock injetado | Assinatura e politica de acesso | RF-13; cenario BDD em docs/testes/aula-09/cenario-bdd.md; testes em AssinaturaTest |
 | RNF-01 | Proteção do online durante batch | API REST e limite online | RNF-01; C-ATAM-02 |
 | RNF-02 | Controle do fluxo de sessão | Sessão | RNF-02; seção 3 |
 | RNF-03 | Expiração de sessão | Sessão | RNF-03; seção 3 |
